@@ -398,7 +398,6 @@ const ScrollRow = ({ onGameSelect }: { onGameSelect: (game: Game) => void }) => 
 export default function App() {
   const [query, setQuery] = useState('');
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
-  const featured = games.find(g => g.featured)!;
 
   // Real-time filtering logic
   const filtered = query.trim()

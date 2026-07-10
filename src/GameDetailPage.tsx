@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Game } from './types';
 
 const CMU_GOLD = '#D4611A';
