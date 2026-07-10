@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { Game } from './types';
 import { GameDetailPage } from './GameDetailPage';
-
+import { AbsenceTrackerPage } from './AbsenceTrackerPage';
 // CMU Faculty of Nursing brand colors
 const CMU_GOLD   = '#D4611A';   // CMU Orange
 const CMU_GOLD2  = '#E07030';   // lighter orange
@@ -398,6 +398,7 @@ const ScrollRow = ({ onGameSelect }: { onGameSelect: (game: Game) => void }) => 
 export default function App() {
   const [query, setQuery] = useState('');
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const [currentView, setCurrentView] = useState<'home' | 'tracker'>('home');
 
   // Real-time filtering logic
   const filtered = query.trim()
@@ -446,7 +447,8 @@ export default function App() {
             <img
               src="/nurselogo.png"
               alt="NurseCMU Logo"
-              className="h-9 w-auto object-contain"
+              className="h-9 w-auto object-contain cursor-pointer"
+              onClick={() => { setCurrentView('home'); setSelectedGame(null); }}
             />
           </div>
 
@@ -481,9 +483,19 @@ export default function App() {
             )}
           </div>
 
-          {/* Right: Name */}
-          <div className="flex flex-1 items-center justify-end">
-            <span className="flex-shrink-0 text-[15px] font-bold tracking-tight" style={{ color: CMU_DARK }}>
+          {/* Right: Name & Menu */}
+          <div className="flex flex-1 items-center justify-end gap-6">
+            <button 
+              onClick={() => { setCurrentView('tracker'); setSelectedGame(null); setQuery(''); }}
+              className={`text-[12px] font-bold uppercase tracking-widest transition ${currentView === 'tracker' ? 'text-[#D4611A]' : 'text-[#8e8e93] hover:text-[#1c1c1e]'}`}
+            >
+              Exceptions
+            </button>
+            <span 
+              className="flex-shrink-0 text-[15px] font-bold tracking-tight cursor-pointer" 
+              style={{ color: CMU_DARK }}
+              onClick={() => { setCurrentView('home'); setSelectedGame(null); }}
+            >
               NurseGame <span style={{ color: CMU_GOLD }}>Hub</span>
             </span>
           </div>
@@ -494,8 +506,10 @@ export default function App() {
       {/* Content */}
       <div className="mx-auto max-w-6xl space-y-10 px-6 py-10">
 
-        {/* Search results view */}
-        {isSearching ? (
+        {/* Tracker view */}
+        {currentView === 'tracker' ? (
+          <AbsenceTrackerPage />
+        ) : isSearching ? (
           <div>
             <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#aeaeb2]">
               {filtered!.length > 0
